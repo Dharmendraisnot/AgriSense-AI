@@ -1,0 +1,71 @@
+{
+  "id": "agrisense-workflow-v1",
+  "name": "AgriSense AI – Agentic Farming Advisor",
+  "description": "Langflow workflow orchestrating all AgriSense AI agents with IBM Granite",
+  "nodes": [
+    {
+      "id": "user_input",
+      "type": "TextInput",
+      "data": { "input_value": "", "name": "Farmer Question" }
+    },
+    {
+      "id": "coordinator",
+      "type": "PromptTemplate",
+      "data": {
+        "template": "You are the AgriSense AI Coordinator. Classify the following farming question into exactly one category: weather, crop, soil, pest, market, or rag.\n\nQuestion: {question}\n\nCategory (one word only):",
+        "input_variables": ["question"]
+      }
+    },
+    {
+      "id": "granite_router",
+      "type": "IBMWatsonxAI",
+      "data": {
+        "model_id": "ibm/granite-13b-chat-v2",
+        "max_new_tokens": 10,
+        "temperature": 0.0
+      }
+    },
+    {
+      "id": "chroma_retriever",
+      "type": "ChromaDB",
+      "data": {
+        "collection_name": "agrisense_knowledge_base",
+        "persist_directory": "./rag/chroma_db",
+        "embedding_model": "sentence-transformers/all-MiniLM-L6-v2",
+        "n_results": 4
+      }
+    },
+    {
+      "id": "rag_prompt",
+      "type": "PromptTemplate",
+      "data": {
+        "template": "You are AgriSense AI, an expert agricultural advisor.\n\nRelevant knowledge:\n{context}\n\nFarmer's question: {question}\n\nProvide a clear, practical, farmer-friendly answer:\n\nAnswer:",
+        "input_variables": ["context", "question"]
+      }
+    },
+    {
+      "id": "granite_answer",
+      "type": "IBMWatsonxAI",
+      "data": {
+        "model_id": "ibm/granite-13b-chat-v2",
+        "max_new_tokens": 512,
+        "temperature": 0.3,
+        "top_p": 0.9
+      }
+    },
+    {
+      "id": "output",
+      "type": "TextOutput",
+      "data": { "name": "AgriSense Answer" }
+    }
+  ],
+  "edges": [
+    { "source": "user_input",      "target": "coordinator",     "label": "question" },
+    { "source": "coordinator",     "target": "granite_router",  "label": "prompt" },
+    { "source": "user_input",      "target": "chroma_retriever","label": "query" },
+    { "source": "chroma_retriever","target": "rag_prompt",      "label": "context" },
+    { "source": "user_input",      "target": "rag_prompt",      "label": "question" },
+    { "source": "rag_prompt",      "target": "granite_answer",  "label": "prompt" },
+    { "source": "granite_answer",  "target": "output",          "label": "answer" }
+  ]
+}

@@ -1,0 +1,17 @@
+venv/
+env1/
+env2/
+mainenv/
+__pycache__/
+*.pyc
+*.pyo
+.env
+.coverage
+logs/
+*.log
+.bob/
+.bobide/
+.bobide-shared/
+.vscode/
+chroma_db/
+*.db

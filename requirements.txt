@@ -1,0 +1,43 @@
+# ============================================================
+#  AgriSense AI – Python Dependencies
+#  Streamlit Cloud compatible (Python 3.12)
+# ============================================================
+
+# ── Web Framework & UI ──────────────────────────────────────
+streamlit>=1.35.0
+httpx>=0.27.0
+
+# ── IBM watsonx.ai SDK ───────────────────────────────────────
+ibm-watsonx-ai==1.1.26
+
+# ── Async helpers ────────────────────────────────────────────
+nest_asyncio>=1.6.0
+
+# ── RAG & Vector Store ───────────────────────────────────────
+chromadb>=1.0.0
+sentence-transformers>=3.0.1
+langchain>=0.2.5
+langchain-community>=0.2.5
+langchain-ibm>=0.1.7
+pypdf>=4.2.0
+python-docx>=1.1.2
+
+# ── Data & ML ────────────────────────────────────────────────
+pandas==2.1.4
+numpy>=1.26.4
+scikit-learn>=1.5.0
+joblib>=1.4.2
+
+# ── Configuration ────────────────────────────────────────────
+pydantic>=2.7.0
+pydantic-settings>=2.3.0
+python-dotenv>=1.0.1
+
+# ── HTTP & APIs ──────────────────────────────────────────────
+requests>=2.32.3
+aiohttp>=3.9.5
+
+# ── Utilities ────────────────────────────────────────────────
+loguru>=0.7.2
+tenacity>=8.3.0
+python-multipart>=0.0.9
